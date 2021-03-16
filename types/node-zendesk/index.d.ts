@@ -73,6 +73,11 @@ export interface ClientOptions {
     debug?: boolean;
     disableGlobalState?: boolean;
     asUser?: string;
+    subdomain?: string;
+    helpcenter?: boolean;
+    nps?: boolean;
+    services?: boolean;
+    voice?: boolean;
 }
 
 export function createClient(config: ClientOptions): Client;
@@ -161,6 +166,17 @@ export namespace JobStatuses {
  * @see {@link https://developer.zendesk.com/rest_api/docs/support/macros|Zendesk Macros}
  */
 export namespace Macros {
+
+    interface ResponseModel extends AuditableModel {
+        actions: { field: string, value: string }[];
+        active?: boolean;
+        description?: string;
+        position?: number;
+        restriction?: any | null;
+        title?: string;
+        url?: string;
+    }
+
     interface Methods {
         applyTicket(
             ticketId: ZendeskID,
@@ -171,6 +187,8 @@ export namespace Macros {
             ticketId: ZendeskID,
             macroId: number
         ): Promise<ApplyTicketResponsePayload>;
+        list(cb: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        list(): Promise<ResponseModel[]>;
     }
 
     interface ApplyTicketResponsePayload {
@@ -1097,7 +1115,7 @@ export namespace Articles {
     /**
      * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/articles|Zendesk Articles JSON Format}
      */
-    interface ArticleModel extends AuditableModel {
+    interface ResponseModel extends AuditableModel {
         author_id: ZendeskID;
         comments_disabled: boolean;
         draft: boolean;
@@ -1119,8 +1137,8 @@ export namespace Articles {
     }
 
     interface Methods {
-        list(cb: ZendeskCallback<unknown, ArticleModel[]>): void;
-        list(): Promise<ArticleModel[]>;
+        list(cb: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        list(): Promise<ResponseModel[]>;
     }
 
 }
