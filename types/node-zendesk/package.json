@@ -1,0 +1,7 @@
+{
+  "name": "@types/node-zendesk",
+  "private": true,
+  "dependencies": {
+    "@types/node": "*"
+  }
+}

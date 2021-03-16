@@ -17,6 +17,7 @@ export type ZendeskCallback<TResponse, TResult> = (
 export interface Client {
     accountsettings: unknown;
     activitystream: unknown;
+    articles: Articles.Methods;
     attachments: Attachments.Methods;
     brand: unknown;
     categories: unknown;
@@ -1088,6 +1089,42 @@ export namespace Users {
     }
 }
 
+/**
+ * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/introduction|Help Center API}
+ */
+export namespace Articles {
+
+    /**
+     * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/articles|Zendesk Articles JSON Format}
+     */
+    interface ArticleModel extends AuditableModel {
+        author_id: ZendeskID;
+        comments_disabled: boolean;
+        draft: boolean;
+        edited_at: string;
+        html_url: string;
+        name: string;
+        outdated: false;
+        outdated_locales: string[];
+        permission_group_id: ZendeskID;
+        position: number;
+        promoted: boolean;
+        section_id: ZendeskID;
+        source_locale: string;
+        title: string;
+        url: string;
+        user_segment_id: ZendeskID | null;
+        vote_sum: number;
+        vote_count: number;
+    }
+
+    interface Methods {
+        list(cb: ZendeskCallback<unknown, ArticleModel[]>): void;
+        list(): Promise<ArticleModel[]>;
+    }
+
+}
+
 export interface PaginablePayload {
     next_page: number | null;
     previous_page: number | null;
@@ -1105,5 +1142,6 @@ export interface TemporalModel extends PersistableModel {
 export interface AuditableModel extends TemporalModel {
     readonly updated_at: string | null;
 }
+
 
 export type ZendeskID = number;

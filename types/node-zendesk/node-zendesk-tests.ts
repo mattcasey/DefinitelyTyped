@@ -190,3 +190,6 @@ client.userfields.create({
         value: 5,
     }]
 }, zendeskCallback);
+
+client.articles.list(zendeskCallback);
+client.articles.list().then(zendeskCallback);
