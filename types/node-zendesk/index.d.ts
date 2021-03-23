@@ -83,10 +83,10 @@ export interface ClientOptions {
 
 export function createClient(config: ClientOptions): Client;
 
-
 interface DefaultMethods {
     options: Provider;
     jsonAPINames: string[];
+    setSideLoad: (arr: string[]) => void;
     sideLoad: string[];
     userAgent: string;
 }
@@ -1122,6 +1122,30 @@ export namespace Users {
  */
 export namespace Articles {
 
+    interface Section {
+        id: ZendeskID;
+        url: string;
+        html_url: string;
+        category_id: ZendeskID,
+        position: number;
+        sorting: string;
+        created_at: string;
+        updated_at: string;
+        name: string;
+        description: string;
+        locale: string;
+        source_locale: string;
+        outdated: boolean;
+        parent_section_id: string | null;
+        theme_template: string;
+    }
+
+    interface Author {
+        id: ZendeskID;
+        name: string;
+        photo: any;
+    }
+
     /**
      * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/articles|Zendesk Articles JSON Format}
      */
@@ -1132,16 +1156,20 @@ export namespace Articles {
         draft: boolean;
         edited_at: string;
         html_url: string;
+        label_names: string[];
+        locale: string;
         name: string;
         outdated: false;
         outdated_locales: string[];
         permission_group_id: ZendeskID;
         position: number;
         promoted: boolean;
+        section?: Section;
         section_id: ZendeskID;
         source_locale: string;
         title: string;
         url: string;
+        user?: Author;
         user_segment_id: ZendeskID | null;
         vote_sum: number;
         vote_count: number;
