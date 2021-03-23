@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "dependencies": {
+    "@types/nconf": "^0.10.0",
     "@types/node": "*"
   }
 }

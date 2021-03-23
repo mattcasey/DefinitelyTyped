@@ -7,6 +7,7 @@
 /// <reference types="node"/>
 
 import { PathLike } from 'fs';
+import { Provider } from 'nconf';
 
 export type ZendeskCallback<TResponse, TResult> = (
     error: Error | undefined,
@@ -59,7 +60,6 @@ export interface Client {
     topicsubscriptions: unknown;
     topicvotes: unknown;
     triggers: unknown;
-    userAgent: string;
     userfields: Users.Fields.Methods;
     useridentities: Users.Identities.Methods;
     users: Users.Methods;
@@ -83,8 +83,17 @@ export interface ClientOptions {
 
 export function createClient(config: ClientOptions): Client;
 
+
+interface DefaultMethods {
+    options: Provider;
+    jsonAPINames: string[];
+    sideLoad: string[];
+    userAgent: string;
+}
+
+
 export namespace Attachments {
-    interface Methods {
+    interface Methods extends DefaultMethods {
         request(httpMethod: string, fields: unknown, config: unknown, cb: ZendeskCallback<unknown, unknown>): unknown;
         request(httpMethod: string, fields: unknown, config: unknown): Promise<unknown>;
 
@@ -125,7 +134,7 @@ export namespace Attachments {
  * @see {@link https://developer.zendesk.com/rest_api/docs/support/job_statuses|Zendesk Job Statuses}
  */
 export namespace JobStatuses {
-    interface Methods {
+    interface Methods extends DefaultMethods {
         show(jobStatusId: ZendeskID, cb: ZendeskCallback<unknown, unknown>): ResponsePayload;
         show(jobStatusId: ZendeskID): Promise<ResponsePayload>;
         watch(
@@ -178,7 +187,7 @@ export namespace Macros {
         url: string;
     }
 
-    interface Methods {
+    interface Methods extends DefaultMethods {
         applyTicket(
             ticketId: ZendeskID,
             macroId: number,
@@ -228,7 +237,7 @@ export namespace Organizations {
  * @see {@link https://developer.zendesk.com/rest_api/docs/support/requests|Zendesk Requests}
  */
 export namespace Requests {
-    interface Methods {
+    interface Methods extends DefaultMethods {
         /** Listing Requests */
         list(cb: ZendeskCallback<unknown, unknown>): ListPayload;
         list(): Promise<ListPayload>;
@@ -408,7 +417,7 @@ export namespace Requests {
  * @see {@link https://developer.zendesk.com/rest_api/docs/support/tickets|Zendesk Tickets}
  */
 export namespace Tickets {
-    interface Methods {
+    interface Methods extends DefaultMethods {
         /** Listing Tickets */
         list(cb: ZendeskCallback<unknown, unknown>): ListPayload;
         list(): Promise<ListPayload>;
@@ -746,7 +755,7 @@ export namespace Tickets {
  * @see {@link https://developer.zendesk.com/rest_api/docs/support/users|Zendesk Users}
  */
 export namespace Users {
-    interface Methods {
+    interface Methods extends DefaultMethods {
         /** User Auth */
         auth(cb: ZendeskCallback<unknown, unknown>): unknown;
         auth(): Promise<unknown>;
@@ -962,7 +971,7 @@ export namespace Users {
      * @see {@link https://developer.zendesk.com/rest_api/docs/support/user_identities|Zendesk User Identities}
      */
     namespace Identities {
-        interface Methods {
+        interface Methods extends DefaultMethods {
             /** Listing Identities */
             list(userId: ZendeskID, cb: ZendeskCallback<unknown, unknown>): ListPayload;
             list(userId: ZendeskID): Promise<ListPayload>;
@@ -1051,7 +1060,7 @@ export namespace Users {
     }
 
     namespace Fields {
-        interface Methods {
+        interface Methods extends DefaultMethods {
             list(cb: ZendeskCallback<unknown, unknown>): unknown;
             list(): Promise<unknown>;
             show(fieldId: ZendeskID, cb: ZendeskCallback<unknown, unknown>): unknown;
@@ -1138,7 +1147,7 @@ export namespace Articles {
         vote_count: number;
     }
 
-    interface Methods {
+    interface Methods extends DefaultMethods {
         list(cb: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
         list(): Promise<ResponseModel[]>;
     }
