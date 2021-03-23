@@ -59,6 +59,7 @@ export interface Client {
     topicsubscriptions: unknown;
     topicvotes: unknown;
     triggers: unknown;
+    userAgent: string;
     userfields: Users.Fields.Methods;
     useridentities: Users.Identities.Methods;
     users: Users.Methods;
@@ -169,12 +170,12 @@ export namespace Macros {
 
     interface ResponseModel extends AuditableModel {
         actions: { field: string, value: string }[];
-        active?: boolean;
-        description?: string;
-        position?: number;
-        restriction?: any | null;
-        title?: string;
-        url?: string;
+        active: boolean;
+        description: string | null;
+        position: number;
+        restriction: any | null;
+        title: string;
+        url: string;
     }
 
     interface Methods {
@@ -1117,6 +1118,7 @@ export namespace Articles {
      */
     interface ResponseModel extends AuditableModel {
         author_id: ZendeskID;
+        body: string;
         comments_disabled: boolean;
         draft: boolean;
         edited_at: string;
