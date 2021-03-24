@@ -763,6 +763,8 @@ export namespace Users {
         /** Listing Users */
         list(cb: ZendeskCallback<unknown, unknown>): ListPayload;
         list(): Promise<ListPayload>;
+        listWithFilter(type: string, value: unknown, cb: ZendeskCallback<unknown, unknown>): ReadonlyArray<ResponseModel>;
+        listWithFilter(type: string, value: unknown): Promise<ReadonlyArray<ResponseModel>>;
         listByGroup(groupId: ZendeskID, cb: ZendeskCallback<unknown, unknown>): ListPayload;
         listByGroup(groupId: ZendeskID): Promise<ListPayload>;
         listByOrganization(organizationId: ZendeskID, cb: ZendeskCallback<unknown, unknown>): ListPayload;
