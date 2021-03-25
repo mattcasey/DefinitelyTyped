@@ -187,18 +187,31 @@ export namespace Macros {
         url: string;
     }
 
+    interface ResponsePayload {
+        macro: ResponseModel;
+    }
+
     interface Methods extends DefaultMethods {
         applyTicket(
             ticketId: ZendeskID,
             macroId: number,
-            cb: ZendeskCallback<unknown, unknown>
+            cb?: ZendeskCallback<unknown, unknown>
         ): ApplyTicketResponsePayload;
-        applyTicket(
-            ticketId: ZendeskID,
-            macroId: number
-        ): Promise<ApplyTicketResponsePayload>;
-        list(cb: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
-        list(): Promise<ResponseModel[]>;
+
+        /** Create Macro */
+        create(macro: ResponseModel, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
+
+        /** Delete Macro */
+        delete(macroId: number, cb?: ZendeskCallback<unknown, unknown>): Promise<void>;
+
+        /** List Macros */
+        list(cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+
+        /** Show Macro */
+        show(macroId: number, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
+
+        /** Update Macro */
+        update(macroId: number, macro: Partial<ResponseModel>, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
     }
 
     interface ApplyTicketResponsePayload {
@@ -1178,8 +1191,34 @@ export namespace Articles {
     }
 
     interface Methods extends DefaultMethods {
-        list(cb: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
-        list(): Promise<ResponseModel[]>;
+
+        associateAttachmentsInBulk(articleId: ZendeskID, attachmentIDsInBulk: string, cb?: ZendeskCallback<unknown, unknown>): Promise<unknown>;
+
+        /** Create Article */
+        create(sectionId: ZendeskID, article: ResponseModel, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        createWithLocale(locale: string, sectionId: ZendeskID, article: ResponseModel, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+
+        /** Delete Macro */
+        delete(articleId: string, cb?: ZendeskCallback<unknown, void>): Promise<void>;
+
+        /** List Articles */
+        list(cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listByLocale(locale: string, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listBySection(sectionId: ZendeskID, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listBySectionByLocale(locale: string, sectionId: ZendeskID, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listByCategory(categoryId: ZendeskID, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listByCategoryByLocale(locale: string, categoryId: string, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listByUser(userId: string, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listSinceStartTime(startTime: string, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+        listByLabelNames(labelNames: string | string[], cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
+
+        /** Show Article */
+        show(articleId: ZendeskID, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel>;
+        showWithLocale(locale: string, articleId: string, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel>;
+
+        /** Update Article */
+        update(articleId: ZendeskID, article: Partial<ResponseModel>, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        updateWithLocale(locale: string, articleId: ZendeskID, article: Partial<ResponseModel>, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
     }
 
 }
