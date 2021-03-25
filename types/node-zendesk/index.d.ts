@@ -211,7 +211,7 @@ export namespace Macros {
         show(macroId: number, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
 
         /** Update Macro */
-        update(macroId: number, macro: Partial<ResponseModel>, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        update(macroId: number, payload: { macro: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
     }
 
     interface ApplyTicketResponsePayload {
@@ -1217,8 +1217,8 @@ export namespace Articles {
         showWithLocale(locale: string, articleId: string, cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel>;
 
         /** Update Article */
-        update(articleId: ZendeskID, article: Partial<ResponseModel>, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
-        updateWithLocale(locale: string, articleId: ZendeskID, article: Partial<ResponseModel>, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        update(articleId: ZendeskID, payload: { article: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        updateWithLocale(locale: string, articleId: ZendeskID, payload: { article: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
     }
 
 }
