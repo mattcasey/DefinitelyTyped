@@ -211,7 +211,7 @@ export namespace Macros {
         show(macroId: number, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
 
         /** Update Macro */
-        update(macroId: number, payload: { macro: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        update(macroId: number, payload: { macro: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
     }
 
     interface ApplyTicketResponsePayload {
