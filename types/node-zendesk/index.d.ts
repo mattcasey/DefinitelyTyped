@@ -38,10 +38,12 @@ export interface Client {
     organizationfields: unknown;
     organizationmemberships: unknown;
     organizations: unknown;
+    permissiongroups: PermissionGroups.Methods;
     policies: unknown;
     requests: Requests.Methods;
     satisfactionratings: unknown;
     search: unknown;
+    sections: Sections.Methods;
     sessions: unknown;
     sharingagreement: unknown;
     suspendedtickets: unknown;
@@ -59,6 +61,7 @@ export interface Client {
     topics: unknown;
     topicsubscriptions: unknown;
     topicvotes: unknown;
+    translations: Translations.Methods;
     triggers: unknown;
     userfields: Users.Fields.Methods;
     useridentities: Users.Identities.Methods;
@@ -1133,19 +1136,46 @@ export namespace Users {
 }
 
 /**
- * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/introduction|Help Center API}
+ * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/permission_groups#content|Zendesk Permission Groups}
  */
-export namespace Articles {
+ export namespace PermissionGroups {
 
-    interface Section {
-        id: ZendeskID;
+    interface ResponseModel extends AuditableModel {
+        built_in: boolean;
+        name: string;
+        edit: ZendeskID[];
+        publish: ZendeskID[];
+    }
+
+    interface CreatePayload {
+        section: Partial<ResponseModel>;
+    }
+
+    interface ListPayload {
+        sections: ResponseModel[];
+    }
+
+    interface Methods extends DefaultMethods {
+
+        list(cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel[]>;
+        show(groupID: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        create(group: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        update(groupID: ZendeskID, section: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        delete(groupID: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<unknown>;
+    }
+}
+
+/**
+ * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/sections|Zendesk Sections}
+ */
+ export namespace Sections {
+
+    interface ResponseModel extends AuditableModel {
         url: string;
         html_url: string;
         category_id: ZendeskID,
         position: number;
         sorting: string;
-        created_at: string;
-        updated_at: string;
         name: string;
         description: string;
         locale: string;
@@ -1154,6 +1184,35 @@ export namespace Articles {
         parent_section_id: string | null;
         theme_template: string;
     }
+
+    interface CreatePayload {
+        section: Partial<ResponseModel>;
+    }
+
+    interface ListPayload {
+        sections: ResponseModel[];
+    }
+
+    interface Methods extends DefaultMethods {
+
+        list(cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel[]>;
+        listByCategory(categoryID: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel[]>;
+        listWithLocale(locale: string, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel[]>;
+        listByCategoryByLocale(locale: string, categoryID: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel[]>;
+        show(sectionID: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        showWithLocale(locale: string, sectionID: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        create(categoryID: ZendeskID, section: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        createWithLocale(locale: string, categoryID: ZendeskID, section: Partial<ResponseModel>, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        update(sectionID: ZendeskID, section: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        updateWithLocale(locale: string, sectionID: ZendeskID, section: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponseModel>;
+        delete(sectionID: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<unknown>;
+    }
+}
+
+/**
+ * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/introduction|Help Center API}
+ */
+export namespace Articles {
 
     interface Author {
         id: ZendeskID;
@@ -1179,7 +1238,7 @@ export namespace Articles {
         permission_group_id: ZendeskID;
         position: number;
         promoted: boolean;
-        section?: Section;
+        section?: Sections.ResponseModel;
         section_id: ZendeskID;
         source_locale: string;
         title: string;
@@ -1190,13 +1249,17 @@ export namespace Articles {
         vote_count: number;
     }
 
+    interface CreatePayload {
+        article: Partial<ResponseModel>;
+    }
+
     interface Methods extends DefaultMethods {
 
         associateAttachmentsInBulk(articleId: ZendeskID, attachmentIDsInBulk: string, cb?: ZendeskCallback<unknown, unknown>): Promise<unknown>;
 
         /** Create Article */
-        create(sectionId: ZendeskID, article: ResponseModel, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
-        createWithLocale(locale: string, sectionId: ZendeskID, article: ResponseModel, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        create(sectionId: ZendeskID, article: CreatePayload, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        createWithLocale(locale: string, sectionId: ZendeskID, article: CreatePayload, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
 
         /** Delete Macro */
         delete(articleId: string, cb?: ZendeskCallback<unknown, void>): Promise<void>;
@@ -1219,6 +1282,29 @@ export namespace Articles {
         /** Update Article */
         update(articleId: ZendeskID, payload: { article: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
         updateWithLocale(locale: string, articleId: ZendeskID, payload: { article: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+    }
+
+}
+
+/**
+ * @see {@link https://developer.zendesk.com/rest_api/docs/help_center/introduction|Help Center API}
+ */
+ export namespace Translations {
+
+    interface Translation {
+        body: string;
+        title: string;
+    }
+
+    interface LocalesResponse {
+        default_locale: string;
+        locales: string[];
+    }
+
+    interface Methods extends DefaultMethods {
+
+        listLocales(cb?: ZendeskCallback<unknown, LocalesResponse[]>): Promise<LocalesResponse>;
+        updateForArticle(articleId: number, locale: string, translation: Partial<Translation>, cb?: ZendeskCallback<unknown, unknown>): Promise<void>
     }
 
 }
