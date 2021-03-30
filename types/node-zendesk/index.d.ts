@@ -192,7 +192,7 @@ export namespace Macros {
 
     interface CreatePayload {
         macro: Partial<ResponseModel>
-    };
+    }
 
     interface ResponsePayload {
         macro: ResponseModel;
