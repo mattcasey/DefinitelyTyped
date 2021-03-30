@@ -190,6 +190,10 @@ export namespace Macros {
         url: string;
     }
 
+    interface CreatePayload {
+        macro: Partial<ResponseModel>
+    };
+
     interface ResponsePayload {
         macro: ResponseModel;
     }
@@ -197,24 +201,24 @@ export namespace Macros {
     interface Methods extends DefaultMethods {
         applyTicket(
             ticketId: ZendeskID,
-            macroId: number,
+            macroId: ZendeskID,
             cb?: ZendeskCallback<unknown, unknown>
         ): ApplyTicketResponsePayload;
 
         /** Create Macro */
-        create(macro: ResponseModel, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
+        create(macro: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
 
         /** Delete Macro */
-        delete(macroId: number, cb?: ZendeskCallback<unknown, unknown>): Promise<void>;
+        delete(macroId: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<void>;
 
         /** List Macros */
         list(cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
 
         /** Show Macro */
-        show(macroId: number, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
+        show(macroId: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
 
         /** Update Macro */
-        update(macroId: number, payload: { macro: Partial<ResponseModel> }, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
+        update(macroId: ZendeskID, payload: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
     }
 
     interface ApplyTicketResponsePayload {
