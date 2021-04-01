@@ -1266,7 +1266,7 @@ export namespace Articles {
         createWithLocale(locale: string, sectionId: ZendeskID, article: CreatePayload, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
 
         /** Delete Macro */
-        delete(articleId: string, cb?: ZendeskCallback<unknown, void>): Promise<void>;
+        delete(articleId: ZendeskID, cb?: ZendeskCallback<unknown, void>): Promise<void>;
 
         /** List Articles */
         list(cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<ResponseModel[]>;
