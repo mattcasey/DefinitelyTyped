@@ -198,6 +198,24 @@ export namespace Macros {
         macro: ResponseModel;
     }
 
+    interface MacroAction {
+        group: string;
+        operators: { title: string, value: string }[];
+        output_key: string | null;
+        target: string | null;
+        title: string;
+        title_for_field: string;
+        value: string;
+        values: {
+            list: { enabled: boolean, title: string, value: string }[];
+            type: 'list' | 'text';
+        }
+    }
+
+    interface MacroActionsResponse {
+        actions: MacroAction[];
+    }
+
     interface Methods extends DefaultMethods {
         applyTicket(
             ticketId: ZendeskID,
@@ -219,6 +237,8 @@ export namespace Macros {
 
         /** Update Macro */
         update(macroId: ZendeskID, payload: CreatePayload, cb?: ZendeskCallback<unknown, unknown>): Promise<ResponsePayload>;
+
+        macros(cb?: ZendeskCallback<unknown, ResponseModel[]>): Promise<MacroAction>;
     }
 
     interface ApplyTicketResponsePayload {
