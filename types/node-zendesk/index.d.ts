@@ -52,7 +52,7 @@ export interface Client {
     ticketaudits: unknown;
     ticketevents: unknown;
     ticketexport: unknown;
-    ticketfields: unknown;
+    ticketfields: TicketFields.Methods;
     ticketforms: unknown;
     ticketimport: unknown;
     ticketmetrics: unknown;
@@ -814,6 +814,51 @@ export namespace Tickets {
         interface ListPayload {
             readonly ticket_metrics: ReadonlyArray<ResponseModel>;
         }
+    }
+}
+
+export namespace TicketFields {
+
+    interface TicketField {
+        active: boolean;
+        agent_description: string;
+        collapsed_for_agents: boolean;
+        created_at: string;
+        description: string;
+        editable_in_portal: boolean;
+        id: ZendeskID;
+        position: number;
+        raw_description: string;
+        raw_title: string;
+        raw_title_in_portal: string;
+        regexp_for_validation: null | string;
+        removable: boolean;
+        required: boolean;
+        required_in_portal: boolean;
+        tag: null | string;
+        title: string;
+        title_in_portal: string;
+        type: string;
+        updated_at: string;
+        url: string;
+        visible_in_portal: boolean;
+    }
+
+    interface ResponseModel {
+        ticket_field: TicketField;
+    }
+
+    interface ListPayload {
+        ticket_fields: TicketField[];
+    }
+
+    interface Methods extends DefaultMethods {
+
+        list(cb?: ZendeskCallback<unknown, ListPayload>): Promise<ListPayload>;
+        show(ticketFieldId: ZendeskID, cb?: ZendeskCallback<unknown, TicketField>): Promise<TicketField>;
+        create(ticketField: TicketField, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        update(ticketFieldId: ZendeskID, ticketField: Partial<TicketField>, cb?: ZendeskCallback<unknown, ResponseModel>): Promise<ResponseModel>;
+        delete(ticketFieldId: ZendeskID, cb?: ZendeskCallback<unknown, unknown>): Promise<unknown>;
     }
 }
 
