@@ -216,26 +216,24 @@ export namespace Macros {
         actions: MacroAction[];
     }
 
-    interface MacroDefinition {
-        definitions: {
-            actions: {
-                group: string;
-                nullable: boolean;
-                repeatable: boolean;
-                subject: string;
-                title: string;
-                type: 'list' | 'text';
-                values: {
-                    enabled: boolean;
-                    title: string;
-                    value: string;
-                }[];
-            }[];
-        }
+    interface ActionDefinition {
+        group: string;
+        nullable: boolean;
+        repeatable: boolean;
+        subject: string;
+        title: string;
+        type: 'list' | 'text';
+        values: {
+            enabled: boolean;
+            title: string;
+            value: string;
+        }[];
     }
 
     interface MacroDefinitionsResponse {
-        definitions: MacroDefinition[];
+        definitions: {
+            actions: ActionDefinition[];
+        }
     }
 
     interface Methods extends DefaultMethods {
